@@ -6,6 +6,7 @@ import Register from "./src/screens/Register";
 import HomeScreen from "./src/screens/HomeScreen";
 import ProductDetail from "./src/screens/ProductDetail";
 import useAuthStore from "./src/hooks/useAuth";
+import PurchaseProducts from "./src/screens/PurchaseProducts";
 
 const Stack = createNativeStackNavigator();
 
@@ -24,8 +25,13 @@ export default function App() {
           <>
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="ProductDetail" component={ProductDetail} />
+            <Stack.Screen
+              name="PurchasedProduct"
+              component={PurchaseProducts}
+            />
           </>
         )}
+        {/* <Stack.Screen name="Book" component={BookedProducts} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

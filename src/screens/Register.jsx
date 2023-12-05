@@ -25,7 +25,7 @@ const Register = () => {
       console.log(email, password, name);
       setError(false);
       const response = await axios.post(
-        "https://pra-ten.vercel.app/api/register",
+        "https://electronics-gray.vercel.app/api/register",
         { name, email, password },
         {
           headers: {
@@ -97,6 +97,7 @@ const Register = () => {
               mode="outlined"
               style={{ marginTop: 15 }}
               onPress={() => handleRegister()}
+              disabled={password.length < 1}
             >
               Register
             </Button>

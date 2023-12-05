@@ -18,7 +18,7 @@ const Login = () => {
       console.log(email, password);
       setError(false);
       const response = await axios.post(
-        "https://pra-ten.vercel.app/api/login",
+        "https://electronics-gray.vercel.app/api/login",
         { email, password },
         {
           headers: {

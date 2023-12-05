@@ -11,17 +11,18 @@ import {
 } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import useAUthStore from "../hooks/useAuth";
 
 const ProductDetail = ({ route }) => {
   const { itemId } = route.params;
-  console.log(itemId);
+  const { id, name, logout } = useAUthStore();
   const [text, setText] = React.useState("");
   const [product, setProduct] = useState();
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          `https://pra-ten.vercel.app/api/products/${itemId}`
+          `https://electronics-gray.vercel.app/api/products/${itemId}`
         );
         const { product } = response.data;
         setProduct(product);
@@ -32,25 +33,55 @@ const ProductDetail = ({ route }) => {
     fetchProducts();
   }, []);
 
-  console.log({ product });
-
   const navigation = useNavigation();
+
+  const handleBuy = async () => {
+    try {
+      const response = await axios.post(
+        "https://electronics-gray.vercel.app/api/purchase",
+        {
+          productId: itemId,
+          userId: id,
+        }
+      );
+      const { message } = response.data;
+      alert(message);
+      navigation.goBack();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <ScrollView>
       <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
         <Appbar.Header>
-          <Appbar.BackAction
+          <Appbar.Action
+            icon="home"
             onPress={() => {
-              navigation.goBack();
+              navigation.navigate("Home");
             }}
             color="red"
           />
           <Appbar.Content
-            title="Trader"
+            title={name && name}
             style={{ alignItems: "center" }}
             color="red"
           />
-          <Appbar.Action icon="bell" color="red" onPress={() => {}} />
+          <Appbar.Action
+            icon="book"
+            color="red"
+            onPress={() => {
+              navigation.navigate("PurchasedProduct");
+            }}
+          />
+
+          <Appbar.Action
+            icon="logout"
+            color="red"
+            onPress={() => {
+              logout();
+            }}
+          />
         </Appbar.Header>
         {product && (
           <Card style={{ marginTop: 10 }}>
@@ -70,23 +101,12 @@ const ProductDetail = ({ route }) => {
               </Text>
             </Card.Content>
             <View style={{ margin: 20 }}>
-              <TextInput
-                label="Bid Price"
-                value={text}
-                mode="outlined"
-                onChangeText={(text) => setText(text)}
-                keyboardType="number-pad"
-              />
               <Button
                 mode="outlined"
                 style={{ marginTop: 20 }}
-                disabled={text == ""}
-                onPress={() => {
-                  alert("Bid submitted successfully");
-                  navigation.navigate("Home");
-                }}
+                onPress={handleBuy}
               >
-                Submit
+                Buy Now
               </Button>
             </View>
           </Card>
